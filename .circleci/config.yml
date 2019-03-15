@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:lts
+
+    environment:
+      NODE_ENV: test
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run: yarn
+      - run: npm run lint
+      - run: npm run coverage
+      - run: ./node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov
+      - run: ./node_modules/.bin/codecov
